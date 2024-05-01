@@ -1,0 +1,13 @@
+<div class="w-full h-screen flex flex-col justify-center items-center gap-5">
+  <h1 class="text-4xl font-bold font-roboto-condensed text-blue-900">Bem-Vindo(a) {{userName}}</h1>
+  <div>
+    <p>Suas permissões no sistema:</p>
+    <ul class="flex flex-col items-baseline ml-10">
+      <li *ngFor="let item of userPermission">
+        {{item}}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<button class="absolute top-5 left-5 bg-red-600 text-white py-1 px-4 rounded-md z-20" (click)="getOut()">Sair</button>

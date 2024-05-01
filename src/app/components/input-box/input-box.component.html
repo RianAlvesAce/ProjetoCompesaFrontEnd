@@ -1,0 +1,9 @@
+<label class=" flex flex-col gap-3">
+  <p class="text-gray-500 text-sm">{{title}}</p>
+  <div class="flex bg-blue-800 bg-opacity-10 rounded-md">
+    <input type="text" class="w-full bg-transparent pl-5 text-sm" name="{{name}}" [(ngModel)]="value" placeholder="{{placeholder}}" (change)="eventEmitter()">
+    <div class="text-xl text-white bg-blue-900 w-12 h-10 flex justify-center items-center rounded-md">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</label>
