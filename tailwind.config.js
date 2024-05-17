@@ -13,7 +13,12 @@ module.exports = {
       },
       width: {
         "28por": "28%",
-        "72por": "72%"
+        "72por": "72%",
+        "8por": "8%"
+      },
+      height: {
+        "45por": "45%",
+        "95por": "95%"
       },
       backgroundImage: {
         "bg-logo": "url(./assets/logo2.svg)"

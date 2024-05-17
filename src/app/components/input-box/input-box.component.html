@@ -1,9 +1,69 @@
-<label class=" flex flex-col gap-3">
-  <p class="text-gray-500 text-sm">{{title}}</p>
-  <div class="flex bg-blue-800 bg-opacity-10 rounded-md">
-    <input type="text" class="w-full bg-transparent pl-5 text-sm" name="{{name}}" [(ngModel)]="value" placeholder="{{placeholder}}" (change)="eventEmitter()">
-    <div class="text-xl text-white bg-blue-900 w-12 h-10 flex justify-center items-center rounded-md">
-      <ng-content></ng-content>
+<label 
+  class=" flex flex-col gap-3"
+>
+  <p 
+    class="text-gray-500 text-sm"
+  >
+    {{title}}
+  </p>
+
+  <div 
+    class="flex bg-blue-800 bg-opacity-10 rounded-md"
+    *ngIf="type == 'text';else inputPass"
+  >
+    <input 
+      [type]="type"
+      class="w-full bg-transparent pl-5 text-sm outline-none" 
+      name="{{name}}" 
+      [(ngModel)]="value" 
+      placeholder="{{placeholder}}" 
+      (change)="eventEmitter()"
+    >
+    <div 
+      class="text-xl text-white bg-blue-900 w-12 h-10 flex justify-center items-center rounded-md"
+    >
+      <fa-icon
+        [icon]="faUserIcon"
+      ></fa-icon>
     </div>
   </div>
 </label>
+
+<ng-template #inputPass>
+  <div 
+    class="flex items-center bg-blue-800 bg-opacity-10 rounded-md relative"
+  >
+    <input 
+      [type]="type" 
+      class="bg-transparent pl-5 text-sm w-full outline-none" 
+      name="{{name}}" 
+      [(ngModel)]="value" 
+      placeholder="{{placeholder}}" 
+      (change)="eventEmitter()"
+      #PassInput
+    >
+
+    <button type="button" class="absolute right-12 z-30" (click)="toggleShowPass()">
+      <fa-icon
+        *ngIf="showPass"
+        class="text-blue-800 opacity-50"
+        [icon]="faEyeIcon"
+      ></fa-icon>
+
+      <fa-icon
+        *ngIf="!showPass"
+        class="text-blue-800 opacity-50"
+        [icon]="faEyeSlashIcon"
+      ></fa-icon>
+
+    </button>
+
+    <div 
+      class="text-xl text-white bg-blue-900 w-12 h-10 flex justify-center items-center rounded-md"
+    >
+      <fa-icon
+        [icon]="faLock"
+      ></fa-icon>
+    </div>
+  </div>
+</ng-template>

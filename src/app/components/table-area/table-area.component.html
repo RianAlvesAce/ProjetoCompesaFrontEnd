@@ -1,0 +1,120 @@
+<button type="button" class="bg-blue-600 w-full py-2 text-xs text-white rounded-sm" (click)="openForm()">Cadastrar Ocorrência</button>
+
+<table class="w-full text-xs">
+  <tr>
+    <th>ID</th>
+    <th>Criador</th>
+    <th>Unidade</th>
+    <th>Tipo</th>
+    <th>PM Alpha</th>
+    <th>Comunicado SIC</th>
+    <th>Prot. NeoEnergia</th>
+    <th>Data de Criação</th>
+    <th>Atualizado por</th>
+    <th>Estado</th>
+    <th>Descrição</th>
+  </tr>
+  <tr *ngFor="let ocorrencia of ocorrenciaList">
+    <td>{{ocorrencia.id_Ocorrencia}}</td>
+    <td>{{ocorrencia.criador}}</td>
+    <td>{{ocorrencia.unidade}}</td>
+    <td>{{ocorrencia.tipo}}</td>
+    <td>{{ocorrencia.pm_alpha}}</td>
+    <td>{{ocorrencia.comunicado}}</td>
+    <td>{{ocorrencia.prot_neoenergia}}</td>
+    <td>{{formatDate(ocorrencia.data)}}</td>
+    <td>{{ocorrencia.atualizado_por}}</td>
+    <td>{{ocorrencia.estado ? 'Aberta' : 'Fechada'}}</td>
+    <td>{{ocorrencia.descricao}}</td>
+  </tr>
+</table>
+
+<div class="absolute bg-black bg-opacity-75 w-full h-full top-0 left-0 z-50 flex justify-center items-center text-sm" *ngIf="showForm">
+  <div class="bg-white w-11/12 h-95por relative">
+    <button type="button" class="absolute right-5 top-5 text-xl" (click)="closeForm()">
+      <fa-icon [icon]="faX"></fa-icon>
+    </button>
+    <h1 class="p-5 border-b-2 text-xl">Cadastrar Ocorrência</h1>
+
+    <form class="flex flex-col gap-5 p-5 items-stretch relative h-5/6 w-full overflow-auto" (submit)="onSubmit($event)">
+      <label class="flex justify-between items-center">
+        <p>Tipo Ocorrência:</p>
+        <select class="w-3/5 p-2 border border-gray-300 rounded outline-none" name="tipo_ocorrencia">
+          <option value="Elétrica">Elétrica</option>
+          <option value="Automação">Automação</option>
+          <option value="Flata de energia (Neoenergia)">Falta de energia (Neoenergia)</option>
+          <option value="Civil">Civil</option>
+          <option value="Hidráulica">Hidráulica</option>
+          <option value="Mecânica">Mecânica</option>
+          <option value="Relato Operacional">Relato Operacional</option>
+          <option value="Apoio Neoenergia (Diversos)">Apoio Neoenergia (Diversos)</option>
+          <option value="Sinistro">Sinistro</option>
+        </select>
+      </label>
+      <label class="flex justify-between items-center">
+        <p>Unidade:</p>
+        <select class="w-3/5 p-2 border border-gray-300 rounded outline-none" name="unidade">
+          <option [value]="name" *ngFor="let name of unidadesList">
+            {{name}}
+          </option>
+        </select>
+      </label>
+
+      <div>
+        <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados SGA</div>
+        <div class="border border-gray-300 p-5 flex flex-col gap-5">
+          <app-input name="Endereço" type="text" nameField="endereco"></app-input>
+          <div class="flex justify-between">
+            <div class="w-1/2">
+              <app-input name="Latitude" type="text" nameField="latitude"></app-input>
+            </div>
+            <div class="w-1/2">
+              <app-input name="Longitude" type="text" nameField="longitude"></app-input>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados PM Alpha</div>
+        <div class="border border-gray-300 p-5 flex flex-col gap-5">
+          <app-input name="Pm Alpha" type="text" nameField="pm_alpha"></app-input>
+          <app-input name="Relato Alpha" type="textarea" nameField="relato_alpha"></app-input>
+        </div>
+      </div>
+
+      <div>
+        <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados Comunicado SIC</div>
+        <div class="border border-gray-300 p-5 flex flex-col gap-5">
+          <app-input name="Número SIC" type="text" nameField="num_SIC"></app-input>
+          <app-input name="Relato SIC" type="textarea" nameField="relato_SIC"></app-input>
+          <div class="flex justify-between">
+            <div class="w-1/2">
+              <app-input name="Início Previsto" type="date" nameField="inicio_pre"></app-input>
+            </div>
+            <div class="w-1/2">
+              <app-input name="Término Previsto" type="date" nameField="termino_pre"></app-input>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados Ocorrência</div>
+        <div class="border border-gray-300 p-5 flex flex-col gap-5">
+          <app-input name="Relato Abertura" type="textarea" nameField="relato_abertura"></app-input>
+          <app-input name="Parada no Sistema" type="checkbox" nameField="parada"></app-input>
+          <app-input name="Redução de Vazão" type="checkbox" nameField="reducao_vazao"></app-input>
+
+          <app-input name="Hora da Ocorrência" type="text" nameField="hora_ocorrencia"></app-input>
+          <app-input name="Número RA ou RI" type="text" nameField="num_ra"></app-input>
+        </div>
+      </div>
+
+      <div class="self-end right-10 bottom-0 flex gap-5">
+        <button type="button" class="bg-gray-300 px-3 py-2 rounded" (click)="closeForm()">Cancelar</button>
+        <button class="bg-blue-600 px-3 py-2 rounded text-white">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</div>
