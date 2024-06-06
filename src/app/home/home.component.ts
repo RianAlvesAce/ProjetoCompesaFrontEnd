@@ -16,7 +16,7 @@ import { InputBoxComponent } from '../components/input-box/input-box.component';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  idValue: string = ''
+  nameValue: string = ''
   passValue: string = ''
   errorMsg: string = 'teste aqui'
   showAlertCard: boolean = false
@@ -28,14 +28,14 @@ export class HomeComponent {
   }
 
   verify(): boolean {
-    if(!this.idValue || !this.passValue) {
+    if(!this.nameValue || !this.passValue) {
       return false
     } 
     return true
   }
 
   getIdValue(event: string) {
-    this.idValue = event
+    this.nameValue = event
   }
 
   getPassValue(event: string) {
@@ -45,8 +45,8 @@ export class HomeComponent {
   async onSubmit(e: Event) {
     e.preventDefault();    
 
-    if(this.idValue || this.passValue) {
-      const result: any = await UserService.login(this.idValue, this.passValue)
+    if(this.nameValue || this.passValue) {
+      const result: any = await UserService.login(this.nameValue, this.passValue)
 
       if(result.status === 200) {
         this.router.navigate(['/teste1'])

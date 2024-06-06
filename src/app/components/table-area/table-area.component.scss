@@ -5,6 +5,10 @@ th, td {
   text-align: start;
 }
 
-td {
-  background-color: rgb(212, 212, 212);
+tr:not(:has(th)):nth-child(odd) {
+  background-color: #fff; /* Cor de fundo para as td ímpares */
+}
+
+tr:nth-child(even) {
+  background-color: #c7c7c7; /* Cor de fundo para as td pares */
 }

@@ -1,0 +1,14 @@
+.numero {
+  .circulo {
+    background-color: red;
+    border-radius: 50%;
+    width: 30px; /* Ajuste conforme necessário */
+    height: 30px !important; /* Ajuste conforme necessário */
+    text-align: center;
+    line-height: 30px; /* Centraliza verticalmente */
+    color: white;
+    font-weight: bold;
+    font-size: 14px; /* Ajuste conforme necessário */
+    z-index: 1000; /* Garanta que o ícone esteja acima de outras camadas */
+  }
+}

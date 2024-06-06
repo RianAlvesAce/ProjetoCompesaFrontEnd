@@ -1,5 +1,20 @@
 <button type="button" class="bg-blue-600 w-full py-2 text-xs text-white rounded-sm" (click)="openForm()">Cadastrar Ocorrência</button>
 
+<div class="flex justify-between text-xs py-2">
+  <input type="text" placeholder="Procurar por ID..." class="border border-gray-300 w-2/5 rounded p-1 outline-none" [(ngModel)]="filterId">
+  <select name="teste" id="" class="rounded border-none outline-none" [(ngModel)]="filterOcorrencia">
+    <option value="" selected>Todas as Ocorrências</option>
+    <option [value]="tipo.name" *ngFor="let tipo of tipoList">{{tipo.name}}</option>
+  </select>
+
+  <select name="" id="" class="rounded border-none outline-none">
+    <option value="all" selected>Todas as Unidades de Controle</option>
+    <option value="" *ngFor="let unidade of unidadeList">{{unidade.nome_unidade}}</option>
+  </select>
+
+  <button class="bg-blue-600 px-4 py-1 text-white rounded" (click)="handleCleanFilter">Limpar Pesquisa</button>
+</div> 
+
 <table class="w-full text-xs">
   <tr>
     <th>ID</th>
@@ -14,86 +29,147 @@
     <th>Estado</th>
     <th>Descrição</th>
   </tr>
-  <tr *ngFor="let ocorrencia of ocorrenciaList">
-    <td>{{ocorrencia.id_Ocorrencia}}</td>
-    <td>{{ocorrencia.criador}}</td>
-    <td>{{ocorrencia.unidade}}</td>
-    <td>{{ocorrencia.tipo}}</td>
-    <td>{{ocorrencia.pm_alpha}}</td>
-    <td>{{ocorrencia.comunicado}}</td>
-    <td>{{ocorrencia.prot_neoenergia}}</td>
-    <td>{{formatDate(ocorrencia.data)}}</td>
-    <td>{{ocorrencia.atualizado_por}}</td>
-    <td>{{ocorrencia.estado ? 'Aberta' : 'Fechada'}}</td>
-    <td>{{ocorrencia.descricao}}</td>
-  </tr>
+  <ng-container *ngFor="let ocorrencia of ocorrenciaList; let i = index">
+    <tr *ngIf="(!filterId || ocorrencia.id_Ocorrencia.toString() == filterId) && (!filterOcorrencia || ocorrencia.tipo == filterOcorrencia)">
+      <td>{{ocorrencia.id_Ocorrencia}}</td>
+      <td>{{ocorrencia.criador}}</td>
+      <td>{{ocorrencia.unidade}}</td>
+      <td>{{ocorrencia.tipo}}</td>
+      <td>{{ocorrencia.pm_alpha}}</td>
+      <td>{{ocorrencia.comunicado}}</td>
+      <td>{{ocorrencia.prot_neoenergia}}</td>
+      <td>{{formatDate(ocorrencia.data)}}</td>
+      <td>{{ocorrencia.atualizado_por}}</td>
+      <td>{{ocorrencia.estado ? 'Aberta' : 'Fechada'}}</td>
+      <td>{{ocorrencia.descricao}}</td>
+      <td>
+        <div class="flex flex-col">
+          <div (click)="openInfo(ocorrencia.id_Ocorrencia)">
+            <fa-icon [icon]="infoIcon"></fa-icon>
+          </div>
+          <div>
+            <fa-icon [icon]="editIcon"></fa-icon>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-container>
 </table>
 
-<div class="absolute bg-black bg-opacity-75 w-full h-full top-0 left-0 z-50 flex justify-center items-center text-sm" *ngIf="showForm">
+
+<div class="absolute bg-black bg-opacity-75 w-full h-full top-0 left-0 z-50 flex justify-center items-center text-xs" *ngIf="showForm">
   <div class="bg-white w-11/12 h-95por relative">
     <button type="button" class="absolute right-5 top-5 text-xl" (click)="closeForm()">
       <fa-icon [icon]="faX"></fa-icon>
     </button>
     <h1 class="p-5 border-b-2 text-xl">Cadastrar Ocorrência</h1>
 
-    <form class="flex flex-col gap-5 p-5 items-stretch relative h-5/6 w-full overflow-auto" (submit)="onSubmit($event)">
-      <label class="flex justify-between items-center">
-        <p>Tipo Ocorrência:</p>
-        <select class="w-3/5 p-2 border border-gray-300 rounded outline-none" name="tipo_ocorrencia">
-          <option value="Elétrica">Elétrica</option>
-          <option value="Automação">Automação</option>
-          <option value="Flata de energia (Neoenergia)">Falta de energia (Neoenergia)</option>
-          <option value="Civil">Civil</option>
-          <option value="Hidráulica">Hidráulica</option>
-          <option value="Mecânica">Mecânica</option>
-          <option value="Relato Operacional">Relato Operacional</option>
-          <option value="Apoio Neoenergia (Diversos)">Apoio Neoenergia (Diversos)</option>
-          <option value="Sinistro">Sinistro</option>
+    <form 
+      class="flex flex-col gap-5 p-5 items-stretch relative h-5/6 w-full overflow-auto" 
+      (submit)="onSubmit($event)"
+    >
+
+      <label class="flex justify-between items-center px-5">
+
+        <p class="font-medium">Tipo Ocorrência:</p>
+
+        <select 
+          class="w-3/5 p-2 border border-gray-300 rounded outline-none" 
+          name="ID_Tipo"
+        >
+          <option value="2" selected>Falta de Energia (Neoenergia)</option>
         </select>
       </label>
-      <label class="flex justify-between items-center">
-        <p>Unidade:</p>
-        <select class="w-3/5 p-2 border border-gray-300 rounded outline-none" name="unidade">
-          <option [value]="name" *ngFor="let name of unidadesList">
-            {{name}}
-          </option>
+      
+      <label class="flex justify-between items-center px-5">
+
+        <p class="font-medium">Unidade:</p>
+
+        <select 
+          class="w-3/5 p-2 border border-gray-300 rounded outline-none" 
+          name="ID_Unidade"
+          (change)="handleChangeUnidade($event)"
+        >
+        
+          <option selected></option>
+          <ng-container *ngFor="let unidade of unidadeList">
+            <option 
+              [value]="unidade.iD_Unidade" 
+            >
+              {{unidade.nome_unidade}}
+            </option>
+          </ng-container>
+
         </select>
       </label>
 
       <div>
-        <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados SGA</div>
-        <div class="border border-gray-300 p-5 flex flex-col gap-5">
-          <app-input name="Endereço" type="text" nameField="endereco"></app-input>
-          <div class="flex justify-between">
-            <div class="w-1/2">
-              <app-input name="Latitude" type="text" nameField="latitude"></app-input>
-            </div>
-            <div class="w-1/2">
-              <app-input name="Longitude" type="text" nameField="longitude"></app-input>
-            </div>
-          </div>
+
+        <div 
+          class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" 
+          (click)="open($event)"
+        >
+          Dados SGA
         </div>
+        
+        <div class="border border-gray-300 p-5 flex flex-col gap-5">
+          
+          <app-input 
+            name="Endereço"  
+            nameField="Endereco" 
+            [disabled]="true"
+            [value]="endereco"
+          ></app-input>
+
+          <div class="flex justify-between">
+
+            <div class="w-1/2">
+
+              <app-input 
+                name="Latitude" 
+                nameField="Latitude" 
+                [disabled]="true" 
+                [value]="lat"
+              ></app-input>
+
+            </div>
+
+            <div class="w-1/2">
+
+              <app-input 
+                name="Longitude" 
+                nameField="Longitude" 
+                [disabled]="true" 
+                [value]="lon"
+              ></app-input>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
-      <div>
+      <!-- <div>
         <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados PM Alpha</div>
         <div class="border border-gray-300 p-5 flex flex-col gap-5">
           <app-input name="Pm Alpha" type="text" nameField="pm_alpha"></app-input>
           <app-input name="Relato Alpha" type="textarea" nameField="relato_alpha"></app-input>
         </div>
-      </div>
+      </div> -->
 
       <div>
         <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados Comunicado SIC</div>
         <div class="border border-gray-300 p-5 flex flex-col gap-5">
-          <app-input name="Número SIC" type="text" nameField="num_SIC"></app-input>
-          <app-input name="Relato SIC" type="textarea" nameField="relato_SIC"></app-input>
+          <app-input name="Número SIC" type="text" nameField="Comunicado_Sic"></app-input>
+          <app-input name="Relato SIC" type="textarea" nameField="Relato_Sic"></app-input>
           <div class="flex justify-between">
             <div class="w-1/2">
-              <app-input name="Início Previsto" type="date" nameField="inicio_pre"></app-input>
+              <app-input name="Início Previsto" type="date" nameField="Inicio_Previsto"></app-input>
             </div>
             <div class="w-1/2">
-              <app-input name="Término Previsto" type="date" nameField="termino_pre"></app-input>
+              <app-input name="Término Previsto" type="date" nameField="Termino_Previsto"></app-input>
             </div>
           </div>
         </div>
@@ -102,18 +178,62 @@
       <div>
         <div class="bg-blue-600 text-white py-3 text-start pl-3 rounded cursor-pointer" (click)="open($event)">Dados Ocorrência</div>
         <div class="border border-gray-300 p-5 flex flex-col gap-5">
-          <app-input name="Relato Abertura" type="textarea" nameField="relato_abertura"></app-input>
-          <app-input name="Parada no Sistema" type="checkbox" nameField="parada"></app-input>
-          <app-input name="Redução de Vazão" type="checkbox" nameField="reducao_vazao"></app-input>
+          <app-input 
+            name="Relato de Abertura" 
+            type="textarea" 
+            nameField="Relato_Abertura"
+          ></app-input>
 
-          <app-input name="Hora da Ocorrência" type="text" nameField="hora_ocorrencia"></app-input>
-          <app-input name="Número RA ou RI" type="text" nameField="num_ra"></app-input>
+          <label class="flex justify-between items-center px-5">
+            <p class="font-medium">Tipo da falta de energia:</p>
+            <select class="border w-4/5 p-2 border-gray-300 rounded outline-none" name="Tipo_Falta">
+              <option value="Total">Total (maior que 3 minutos)</option>
+              <option value="Fase">Fase (maior que 3 minutos)</option>
+              <option value="Oscilação de tensão">Oscilação de tensão (piscada)</option>
+              <option value="Desbalanceamento/Nível tensão">Desbalanceamento/Nível tensão</option>
+              <option value="Religar unidade">Religar unidade (furto, manutenção)</option>
+              <option value="Desligamento programado">Desligamento programado Neoenergia</option>
+              <option value="Problema interno">Problema interno</option>
+            </select>
+          </label>
+
+          <app-input 
+            name="NR(Número da reclamação)" 
+            type="text" 
+            nameField="Numero_Nr" 
+            placeholder="NR(Número de reclamação)"
+          ></app-input>
+
+          <app-input 
+            name="Protocolo Neoenergia" 
+            type="text" 
+            nameField="Prot_Energia" 
+            placeholder="Número do Protocolo Neoenergia"
+          ></app-input>
+
+          <app-input 
+            name="Hora da Ocorrência" 
+            type="text" 
+            nameField="Hora_Ocorrencia"
+          ></app-input>
+
+          <app-input 
+            name="Hora Prevista" 
+            type="text" 
+            nameField="Hora_Prevista"
+          ></app-input>
+
+          <app-input
+            name="Endereco da Ocorrência"
+            type="text"
+            nameField="Endereco"
+          ></app-input>
         </div>
       </div>
 
       <div class="self-end right-10 bottom-0 flex gap-5">
         <button type="button" class="bg-gray-300 px-3 py-2 rounded" (click)="closeForm()">Cancelar</button>
-        <button class="bg-blue-600 px-3 py-2 rounded text-white">Cadastrar</button>
+        <button class="bg-blue-600 px-3 py-2 rounded text-white" type="submit">Cadastrar Ocorrência</button>
       </div>
     </form>
   </div>

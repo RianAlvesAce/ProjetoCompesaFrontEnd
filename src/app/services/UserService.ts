@@ -5,8 +5,8 @@ const api = axios.create({
 })
 
 class UserService {
-  static async login(userId: string, userPass: string) {
-    const response = api.get(`/api/User/login?UserId=${userId}&UserPass=${userPass}`)
+  static async login(userNick: string, userPass: string) {
+    const response = api.get(`/api/User/login?UserNick=${userNick}&UserPass=${userPass}`)
       .then((response: AxiosResponse) => {
         return {
           token: response.data.token,

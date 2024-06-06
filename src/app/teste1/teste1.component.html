@@ -1,28 +1,59 @@
 <div class="map-container flex gap-5 h-screen items-center px-2">
-  <div class="w-8por h-95por bg-blue-800 bg-opacity-10"></div>
-  <div class="flex flex-col w-full h-95por gap-5">
-    <div class="flex h-2/5 gap-5">
+  <div [classList]="['w-0 h-95por transition-all rounded border-blue-800 border-opacity-50 bg-blue-800 bg-opacity-10 overflow-hidden flex flex-col items-center gap-10', ]" #menu>
+
+    <div class="w-full flex justify-center mt-5">
+      <img src="../../assets/logo2.svg" alt="" class="w-1/2">
+    </div>
+
+    <a routerLink="/teste2" class="w-1/2 text-3xl flex flex-col justify-center items-center text-blue-800 cursor-pointer">
+      <fa-icon [icon]="relatorioIcon"></fa-icon>
+      <p class="text-sm">Relatorio</p>
+    </a>
+
+  </div>
+  <div class="flex flex-col w-full h-95por">
+    <div class="flex justify-center mb-2 cursor-pointer relative">
+      <h1>SRO - Sistema de Registro de Ocorrências</h1>
+      <div (click)="openMenu()" class="absolute right-0">
+        <fa-icon [icon]="faBarsIcon"></fa-icon>
+      </div>
+    </div>
+    <div class="flex h-4/5 gap-5 mb-5">
+ 
       <div id="map" class="w-2/3 h-full rounded border z-10"></div>
-      <div class="w-1/3 h-full flex flex-col gap-3 overflow-hidden">
-        <div class="bg-rose-700 flex-1 flex flex-col justify-around rounded text-white overflow-hidden ">
-          <p class="font-bold text-sm mt-2 ml-2">40</p>
+      
+      <div class="w-1/3 h-full flex flex-col gap-2 overflow-hidden">
+
+        <div class="bg-rose-700 flex-1 flex flex-col justify-around rounded text-white overflow-hidden relative">
+          <p class="font-bold text-sm mt-2 ml-2">{{unidParada}}</p>
           <p class="text-xs ml-2 mb-1">Ocorrências Unidades Paradas</p>
+          <div class="absolute right-5 top-1/4 text-xl text-red-800">
+            <fa-icon [icon]="bullHornIcon"></fa-icon>
+          </div>
           <div class="bg-red-800 flex justify-center items-center h-full">
-            <p class="text-xs">Visualizar</p>
+            <p class="text-xs" (click)="showParadas()">Visualizar <span class="ml-1"><fa-icon [icon]="arrowRightIcon"></fa-icon></span> </p>
           </div>
         </div>
-        <div class="bg-orange-500 flex-1 flex flex-col justify-around rounded text-white overflow-hidden ">
-          <p class="font-bold text-sm mt-2 ml-2">40</p>
-          <p class="text-xs ml-2 mb-1">Ocorrências Unidades Paradas</p>
+
+        <div class="bg-orange-500 flex-1 flex flex-col justify-around rounded text-white overflow-hidden relative">
+          <p class="font-bold text-sm mt-2 ml-2">{{redVazao}}</p>
+          <p class="text-xs ml-2 mb-1">Ocorrências com Redução de Vazão</p>
+          <div class="absolute right-5 top-1/4 text-xl text-orange-700">
+            <fa-icon [icon]="bullHornIcon"></fa-icon>
+          </div>
           <div class="bg-orange-700 flex justify-center items-center h-2/4">
-            <p class="text-xs">Visualizar</p>
+            <p class="text-xs" (click)="showVazao()">Visualizar <span class="ml-1"><fa-icon [icon]="arrowRightIcon"></fa-icon></span></p>
           </div>
         </div>
-        <div class="bg-yellow-500 flex-1 flex flex-col justify-around rounded text-white overflow-hidden ">
-          <p class="font-bold text-sm mt-2 ml-2">40</p>
-          <p class="text-xs ml-2 mb-1">Ocorrências Unidades Paradas</p>
+
+        <div class="bg-yellow-500 flex-1 flex flex-col justify-around rounded text-white overflow-hidden relative">
+          <p class="font-bold text-sm mt-2 ml-2">{{pend}}</p>
+          <p class="text-xs ml-2 mb-1">Ocorrências Pendentes</p>
+          <div class="absolute right-5 top-1/4 text-xl text-yellow-600">
+            <fa-icon [icon]="bullHornIcon"></fa-icon>
+          </div>
           <div class="bg-yellow-600 flex justify-center items-center h-2/4">
-            <p class="text-xs">Visualizar</p>
+            <p class="text-xs" (click)="showAll()">Visualizar <span class="ml-1"><fa-icon [icon]="arrowRightIcon"></fa-icon></span></p>
           </div>
         </div>
 
@@ -31,7 +62,6 @@
     <app-table-area 
       class="h-full" 
       [ocorrenciaList]="ocorrencias"
-      [unidadesList]="unidades"
     ></app-table-area>
   </div>
 </div>

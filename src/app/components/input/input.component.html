@@ -1,8 +1,40 @@
 <label class="flex justify-between items-center px-5" *ngIf="type != 'checkbox'">
   <p class="font-medium">{{name}}:</p>
-  <input type="text" [name]="nameField" id="" class="border w-4/5 p-2 border-gray-300 rounded outline-none"*ngIf="type == 'text'">
-  <textarea [name]="nameField" id="" class="border w-4/5 p-2 border-gray-300 rounded outline-none" *ngIf="type == 'textarea'"></textarea>
-  <input type="date" [name]="nameField" id="" *ngIf="type == 'date'" class="border w-4/5 p-2 border-gray-300 rounded outline-none">
+  <input 
+    type="text" 
+    [name]="nameField" 
+    id="" 
+    class="border w-4/5 p-2 border-gray-300 rounded outline-none"
+    *ngIf="type == 'text'" 
+    (change)="eventEmitter($event)"
+    [placeholder]="!placeholder ? '' : placeholder"
+  >
+
+  <input 
+    type="text" 
+    [name]="nameField" 
+    id="" 
+    class="border w-4/5 p-2 border-gray-300 rounded outline-none"
+    *ngIf="disabled" 
+    disabled 
+    [value]="value"
+  >
+
+  <textarea 
+    [name]="nameField" 
+    id="" 
+    class="border w-4/5 p-2 border-gray-300 rounded outline-none" 
+    *ngIf="type == 'textarea'"
+  >
+  </textarea>
+
+  <input 
+    type="date" 
+    [name]="nameField" 
+    id="" 
+    *ngIf="type == 'date'" 
+    class="border w-4/5 p-2 border-gray-300 rounded outline-none"
+  >
 </label>
 
 <label class="flex items-center px-5 gap-5" *ngIf="type == 'checkbox'">
